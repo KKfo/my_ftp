@@ -1,20 +1,14 @@
 /*
-** client.c for my_ftp in /home/xxx/Documents
+** client/main.c for my_ftp in /home/xxx/Documents
 ** 
 ** Made by Adolfo Flores
 ** Login   <flores_a@epitech.eu>
 ** 
-** Started on  Sun Mar 22 14:45:32 2015 
-** Last update Sun Mar 22 16:35:59 2015 
+** Started on  Sun Mar 22 17:01:56 2015 
+** Last update Sun Mar 22 21:59:03 2015 
 */
 
-#include                <sys/socket.h>
-#include                <stdlib.h>
-#include                <netdb.h>
-#include                <netinet/in.h>
-#include                <arpa/inet.h>
-#include                <unistd.h>
-#include                <string.h>
+#include                "../include/defs.h"
 
 char                    check_args(int ac, char *av, int *p)
 {
@@ -57,20 +51,13 @@ void                    init_sin(struct sockaddr_in *s_in, int port, char *ip)
 
 int                     main(int argc, char **argv)
 {
-  char                  buff[1024];
-  int                   r;
   struct sockaddr_in    s_in;
   struct protoent       *s_p;
   int                   port;
   int                   sockfd;
-  struct sockaddr_in    s_in_client;
-  socklen_t             s_in_size;
-  int                   client_fd;
-  char                  *client_ip;
 
   if ((check_args(argc, argv[2], &port)))
     return (EXIT_FAILURE);
-  s_in_size = sizeof(s_in);
   init_sin(&s_in, port, argv[1]);
   if (init_socket(&s_p, &sockfd))
     return (EXIT_FAILURE);
@@ -79,9 +66,9 @@ int                     main(int argc, char **argv)
       perror("connect");
       return(EXIT_FAILURE);  
     }
-  r = read(sockfd, buff, 1024);
-  buff[r] = '\0';
-  printf("%s", buff);
+  printf("Connected to %s\n[Epitech ftp 1.0]\n", argv[1]);
+  if (handle_commands(sockfd))
+    return(EXIT_FAILURE);
   if (close(sockfd) == -1)
     {
       perror("close");
@@ -90,5 +77,3 @@ int                     main(int argc, char **argv)
     
   return (EXIT_SUCCESS);
 }
-
-
