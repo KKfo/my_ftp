@@ -5,7 +5,7 @@
 ** Login   <flores_a@epitech.eu>
 ** 
 ** Started on  Fri Mar 13 17:02:03 2015 
-** Last update Mon Mar 23 12:36:42 2015 
+** Last update Mon Mar 23 12:44:55 2015 
 */
 
 #include                "../include/defs.h"
@@ -17,8 +17,9 @@ int                     handle_client(int fd/* , int sockfd */)
 
   if (write(fd, connection_established, 4) == -1)
     return (1);
-  while((r =read(fd, buff, 1024)))
+  while((strcmp(buff, "")))
     {
+      r = read(fd, buff, 1024);
       buff[r] = '\0';
       printf("%s", buff);
       write(fd, need_pass, 4);

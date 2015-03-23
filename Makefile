@@ -5,7 +5,7 @@
 ## Login   <flores_a@epitech.eu>
 ## 
 ## Started on  Sat Mar 21 14:44:31 2015 
-## Last update Sun Mar 22 17:31:17 2015 
+## Last update Mon Mar 23 13:38:07 2015 
 ##
 
 CLNT_SRC =		clnt/main.c \
@@ -26,7 +26,7 @@ CLNT =		client
 
 CC =		gcc
 
-CFLAGS =	-Wall -Werror -Wextra -pedantic -ansi
+CFLAGS =	-Wall -Werror -Wextra -pedantic
 
 RM =		rm -f
 

@@ -5,7 +5,7 @@
 ** Login   <flores_a@epitech.eu>
 ** 
 ** Started on  Sat Mar 21 15:01:32 2015 
-** Last update Mon Mar 23 12:16:47 2015 
+** Last update Mon Mar 23 13:46:19 2015 
 */
 
 #ifndef                         DEFS_H_
@@ -37,12 +37,11 @@
 /* #define STARTTRANSFER           500 */
 /* #define CLIENT_PORT_ID          6086 */
 
-#define                 connection_established "220\n"
-#define                 user_logged_in "230\n"
-#define                 user_ok "331\n"
-#define                 bad_pass "332\n"
-#define                 action_completed "250\n"
-#define                 need_pass "331\n"
+#define                 connection_established "220"
+#define                 user_logged_in "230"
+#define                 bad_pass "332"
+#define                 action_completed "250"
+#define                 need_pass "331"
 
 typedef struct                  s_vars
 {
