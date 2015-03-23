@@ -5,7 +5,7 @@
 ** Login   <flores_a@epitech.eu>
 ** 
 ** Started on  Sat Mar 21 15:01:32 2015 
-** Last update Mon Mar 23 13:46:19 2015 
+** Last update Mon Mar 23 14:50:40 2015 
 */
 
 #ifndef                         DEFS_H_
@@ -42,6 +42,7 @@
 #define                 bad_pass "332"
 #define                 action_completed "250"
 #define                 need_pass "331"
+#define                 not_logged_in "530"
 
 typedef struct                  s_vars
 {
