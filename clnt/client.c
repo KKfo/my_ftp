@@ -5,7 +5,7 @@
 ** Login   <flores_a@epitech.eu>
 ** 
 ** Started on  Sun Mar 22 14:45:32 2015 
-** Last update Tue Mar 24 13:24:10 2015 
+** Last update Tue Mar 24 14:05:08 2015 
 */
 
 #include                "../include/defs.h"
@@ -81,14 +81,11 @@ int             auth(FILE *sock_stream)
   return (0);
 }
 
-char            **tokenize(char *str)
+char            **tokenize(char *str, char **tab)
 {
   int           i;
-  char          **tab;
 
   i = 1;
-  if ((tab = malloc(sizeof(char*) * 1024)) == NULL)
-    return(NULL);
   while(*str == ' ' || *str == '\t')
     str++;
   tab[0] = str;
@@ -102,6 +99,7 @@ char            **tokenize(char *str)
         }
       else
         str++;
+      /* Add realloc routine */
     }
   *(str - 1) = '\0';
   return(tab);
@@ -134,8 +132,7 @@ char            execute_instr(char **tab, FILE *sock_stream)
     }
   if (strcmp("pwd", tab[0]) == 0)
     {
-    }
-  
+    }  
   bzero(tab, 1024);
   return (0);
 }
@@ -144,12 +141,14 @@ int             handle_commands(int fd)
 {
   ssize_t       r;
   char          *buff;
-  char          **tab = NULL;
+  char          **mtab = NULL;
+  char          **tab;
   FILE          *sock_stream;
 
   r = 1;
   tab = NULL;
-  if ((buff = malloc(sizeof(char) * 1024)) == NULL
+  if ((mtab = malloc(sizeof(char*) * 1024)) == NULL
+      || (buff = malloc(sizeof(char) * 1024)) == NULL
       || (sock_stream = fdopen(fd, "r+")) == NULL
       || (get_string(sock_stream, &buff, 3, 1)) == -1)
     return(1);
@@ -163,9 +162,11 @@ int             handle_commands(int fd)
       write(1, "\x1B[92mftp-> \x1B[0m", 15);
       if ((r = get_string(stdin, &buff, 1024, 0)) == -1)
         return(1);
-      if ((tab = tokenize(buff)) == NULL)
+      if ((tab = tokenize(buff, mtab)) == NULL)
         return(1);
     }
   free(buff);
+  free(mtab);
+  printf("Bye\n");
   return (0);
 }
