@@ -5,7 +5,7 @@
 ** Login   <flores_a@epitech.eu>
 ** 
 ** Started on  Sun Mar 22 17:01:56 2015 
-** Last update Sun Mar 22 21:59:03 2015 
+** Last update Tue Mar 24 13:13:36 2015 
 */
 
 #include                "../include/defs.h"
@@ -66,7 +66,7 @@ int                     main(int argc, char **argv)
       perror("connect");
       return(EXIT_FAILURE);  
     }
-  printf("Connected to %s\n[Epitech ftp 1.0]\n", argv[1]);
+  printf("\n[\x1B[34mEpitech \x1B[0m\x1B[93mmy_ftp\x1B[0m 1.0]\n\nConnected to %s\n", argv[1]);
   if (handle_commands(sockfd))
     return(EXIT_FAILURE);
   if (close(sockfd) == -1)

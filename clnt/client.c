@@ -5,36 +5,40 @@
 ** Login   <flores_a@epitech.eu>
 ** 
 ** Started on  Sun Mar 22 14:45:32 2015 
-** Last update Mon Mar 23 15:29:39 2015 
+** Last update Tue Mar 24 13:24:10 2015 
 */
 
 #include                "../include/defs.h"
 
-int             get_string(int fd, char *buff, size_t l, char s)
+int                     get_string(FILE *sock_stream, char **buff, size_t l, char s)
 {
-  int           r;
+  size_t                n;
+  ssize_t               r;
 
-  r = read(fd, buff, 1024);
-  buff[r] = '\0';
+  n = 1024;
+  r = 0;
+  if ((r = getline(buff, &n, sock_stream)) == -1)
+      return(-1);
   if (s)
     {
-      printf("server: %s", buff);
+      if ((printf("server: %s", *buff)) < 0)
+        return(-1);
       fflush(stdout);
+      bzero(&(*buff)[l], r - l);
     }
-  bzero(&buff[l], 1024 - l);
   return(r);
 }
 
-int             user(char *user, int fd)
+int             user(char *user, FILE *sock_stream)
 {
-  char          buffer[1024];
-  FILE          *sock_stream;
+  char          *buffer;
   char          *pass;
-  
-  sock_stream = fdopen(fd, "r+");
+
+  if ((buffer = malloc(sizeof(char) * 1024)) == NULL)
+    return(1);
   fprintf(sock_stream, "USER %s\n", user);
   fflush(sock_stream);
-  get_string(fd, buffer, 3, 1);
+  get_string(sock_stream, &buffer, 3, 1);
   if (!strcmp(buffer, need_pass))
     {
       pass = getpass("(password): ");
@@ -44,66 +48,124 @@ int             user(char *user, int fd)
   else if (!strcmp(buffer, user_logged_in))
     {
       printf("client: user logged in\n");
+      free(buffer);
       return(0);
     }
   else if (!strcmp(buffer, not_logged_in))
     {
-      printf("client: user could not logged in\n");
+      printf("client: user could not log in\n");
+      free(buffer);
       return(0);
     }
-  get_string(fd, buffer, 3, 1);
+  get_string(sock_stream, &buffer, 3, 1);
   if (!strcmp(buffer, user_logged_in))
     {
       printf("client: user logged in\n");
     }
+  free(buffer);
   return (0);
 }
 
-int             auth(int fd)
+int             auth(FILE *sock_stream)
 {
-  int           r;
-  char          buffer[1024];
+  size_t        len;
+  char          *cuser;
 
+  cuser = NULL;
   printf("(username): ");
   fflush(stdout);
-  r = get_string(0, buffer, 1024, 0);
-  buffer[r] = '\0';
-  user(buffer, fd);
+  if (getline(&cuser, &len, stdin) == -1)
+    return(1);
+  user(cuser, sock_stream);
+  free(cuser);
   return (0);
 }
 
-char            execute_instr(char *buff, int fd)
+char            **tokenize(char *str)
 {
-  if (strcmp("quit", buff) == 0)
-    return(1);
-  if (strncmp("user", buff, 4) == 0)
+  int           i;
+  char          **tab;
+
+  i = 1;
+  if ((tab = malloc(sizeof(char*) * 1024)) == NULL)
+    return(NULL);
+  while(*str == ' ' || *str == '\t')
+    str++;
+  tab[0] = str;
+  while(*str)
     {
-      if (strcmp("user", buff) == 0)
-        auth(fd);
+      if ((*str == ' ' || *str == '\t')
+          && (*(str + 1) != ' ' || *(str + 1) != '\t'))
+        {
+          *str = '\0';
+          tab[i] = ++str;
+        }
       else
-        user(&buff[5], fd);
+        str++;
     }
+  *(str - 1) = '\0';
+  return(tab);
+}
+
+char            execute_instr(char **tab, FILE *sock_stream)
+{
+  if (tab == NULL)
+    return(0);
+  if (strcmp("quit", tab[0]) == 0)
+    return(1);
+  if (strcmp("user", tab[0]) == 0)
+    {
+      if (tab[1] == NULL)
+        auth(sock_stream);
+      else
+        user(tab[1], sock_stream);
+    }
+  if (strcmp("ls", tab[0]) == 0)
+    {
+    }
+  if (strcmp("cd", tab[0]) == 0)
+    {
+    }
+  if (strcmp("get", tab[0]) == 0)
+    {
+    }
+  if (strcmp("put", tab[0]) == 0)
+    {
+    }
+  if (strcmp("pwd", tab[0]) == 0)
+    {
+    }
+  
+  bzero(tab, 1024);
   return (0);
 }
 
 int             handle_commands(int fd)
 {
-  int           r;
-  char          buff[1024];
+  ssize_t       r;
+  char          *buff;
+  char          **tab = NULL;
+  FILE          *sock_stream;
 
   r = 1;
-  get_string(fd, buff, 3, 1);
+  tab = NULL;
+  if ((buff = malloc(sizeof(char) * 1024)) == NULL
+      || (sock_stream = fdopen(fd, "r+")) == NULL
+      || (get_string(sock_stream, &buff, 3, 1)) == -1)
+    return(1);
   if (!strcmp(buff, connection_established))
     {
-      printf("Connected succesfully\n");
-      auth(fd);
+      if (auth(sock_stream))
+        printf("auth error\n");
     }
-  bzero(buff, 1024);
-  while(!execute_instr(buff, fd) && r)
+  while(!execute_instr(tab, sock_stream) && r)
     {
-      write(1, "ftp-> ", 6);
-      r = read(0, buff, 1024);
-      buff[r - 1] = '\0';
+      write(1, "\x1B[92mftp-> \x1B[0m", 15);
+      if ((r = get_string(stdin, &buff, 1024, 0)) == -1)
+        return(1);
+      if ((tab = tokenize(buff)) == NULL)
+        return(1);
     }
+  free(buff);
   return (0);
 }
