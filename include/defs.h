@@ -5,7 +5,7 @@
 ** Login   <flores_a@epitech.eu>
 ** 
 ** Started on  Sat Mar 21 15:01:32 2015 
-** Last update Mon Mar 23 14:50:40 2015 
+** Last update Sat Mar 28 04:40:00 2015 
 */
 
 #ifndef                         DEFS_H_
@@ -37,13 +37,16 @@
 /* #define STARTTRANSFER           500 */
 /* #define CLIENT_PORT_ID          6086 */
 
-#define                 connection_established "220"
-#define                 user_logged_in "230"
+#define                 CON_ESTAB "220"
+#define                 LOGGED_IN "230"
 #define                 bad_pass "332"
 #define                 action_completed "250"
-#define                 need_pass "331"
-#define                 not_logged_in "530"
+#define                 NEED_PASS "331"
+#define                 NOT_L_IN "530"
+#define                 UNUSED(x) (void)(x)
 
+typedef int (*t_aptr)(char **, FILE *);
+typedef int (*t_pt)(char **,FILE *);
 typedef struct                  s_vars
 {
   struct sockaddr_in            s_in;
@@ -53,9 +56,31 @@ typedef struct                  s_vars
   struct sockaddr_in            s_in_client;
   socklen_t                     s_in_size;
   int                           client_fd;
+  int                           server_fd;
+  char                          *file;
   char                          *client_ip;
 }                               t_vars;
 
+int                     listen_to_server(char flg, char *file, int port);
+int                             need_password(char **buffer, FILE* sock_stream);
+int                             logged_in(char **buffer, FILE* sock_stream);
+int                             not_logged_in(char **buffer, FILE* sock_stream);
+int                             get_string(FILE *sock_stream,
+                                           char **buff, size_t l,
+                                           char s);
+int                             quit(char **, FILE *);
+int                             user(char *, FILE *);
+int                             ls(char **, FILE *);
+int                             cd(char **, FILE *);
+int                             get(char **, FILE *);
+int                             put(char **, FILE *);
+int                             pwd(char **, FILE *);
+char                            init_socket(int *fd);
+void                            init_sin(struct sockaddr_in *s_in,
+                                         int port, char *ip);
+int                             connect_to_server(struct sockaddr *s_in,
+                                                  int *sockfd, int port, char *ip);
+int                             auth(char **tab, FILE *sock_stream);
 int                             readn(int sd,char *ptr,int size);
 int                             writen(int sd,char *ptr,int size);
 int                             process_clients(t_vars *v);
