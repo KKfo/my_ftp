@@ -5,7 +5,7 @@
 ** Login   <flores_a@epitech.eu>
 ** 
 ** Started on  Fri Mar 27 23:43:08 2015 
-** Last update Sat Mar 28 05:00:37 2015 
+** Last update Sat Mar 28 05:03:27 2015 
 */
 
 #include        "../include/defs.h"
@@ -56,7 +56,7 @@ int                     get_data(t_vars *v, char flg)
   char                  *buff;
 
   buff = malloc(1024);
-  get_string(fdopen(v->server_fd, "r+"), &buff, 1024, 1);
+  get_string(fdopen(v->sockfd, "r+"), &buff, 1024, 1);
   write(1, buff, 1024);
   return (0);
 }
