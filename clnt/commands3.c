@@ -5,7 +5,7 @@
 ** Login   <flores_a@epitech.eu>
 ** 
 ** Started on  Wed Mar 25 20:25:32 2015 
-** Last update Sun Mar 29 13:24:29 2015 
+** Last update Sun Mar 29 14:18:48 2015 
 */
 
 #include        "../include/defs.h"
@@ -46,7 +46,7 @@ int             send_port_cmd(FILE *f)
   get = NULL;
   s = 0;
   getline(&get, &s, f);
-  printf("%s\n", get);
+  printf("%s", get);
   return (p);
 }
 
@@ -57,27 +57,10 @@ int             active_data_connection(FILE *f, char flg, char *file)
   int           p;
 
   p = send_port_cmd(f);
-  printf("%i\n", p);
-  if (!fork())
+  if (r = write(fileno(f), "LIST \r\n", 7) < 0)
     {
-      printf("Hello from listen to server child\n");
-      listen_to_server(flg, file, p);
-      exit(1);
+      perror("write");
     }
-  else
-    {
-      sleep(4);
-      printf("send list command to server\n");
-      /* while(1) */
-      /*   { */
-      if (r = write(fileno(f), "LIST \r\n", 7) < 0)
-        {
-          perror("fprintf");
-          printf("error transmission");
-        }
-      printf("sent %i\n", r);
-        /* } */
-    }
-  wait();
+  listen_to_server(flg, file, p);
   return (0);
 }
