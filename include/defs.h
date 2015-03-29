@@ -5,7 +5,7 @@
 ** Login   <flores_a@epitech.eu>
 ** 
 ** Started on  Sat Mar 21 15:01:32 2015 
-** Last update Sun Mar 29 16:27:19 2015 
+** Last update Sun Mar 29 17:12:40 2015 
 */
 
 #ifndef                         DEFS_H_
@@ -37,6 +37,8 @@
 /* #define STARTTRANSFER           500 */
 /* #define CLIENT_PORT_ID          6086 */
 
+#define                 OPEN_CONNECTION "150"
+#define                 SUCCESS "200"
 #define                 CON_ESTAB "220"
 #define                 LOGGED_IN "230"
 #define                 bad_pass "332"

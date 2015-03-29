@@ -5,7 +5,7 @@
 ** Login   <flores_a@epitech.eu>
 ** 
 ** Started on  Fri Mar 27 23:43:08 2015 
-** Last update Sun Mar 29 16:27:47 2015 
+** Last update Sun Mar 29 17:50:07 2015 
 */
 
 #include        "../include/defs.h"
@@ -47,8 +47,11 @@ int                     get_data(t_vars *v, char flg)
   size_t                r;
   char                  buff[2048];
 
-  while (r = read(v->server_fd, buff, 2048))
-    write(1, buff, r);
+  if (flg == 'l')
+    {
+      while (r = read(v->server_fd, buff, 2048))
+        write(1, buff, r);
+    }
   return (0);
 }
 
@@ -59,16 +62,20 @@ int                     send_data(t_vars *v)
 
 int                     accept_data(t_vars *v, char flg, FILE *f)
 {
-  char                  *buff;
-  size_t                s;
+  char                  *b;
 
-  s = 0;
-  buff = NULL;
+  if ((b = malloc(sizeof(char) * 1024)) == NULL)
+    return (EXIT_FAILURE);
+  get_string(f, &b, 3, 1);
+  if (strcmp(b, OPEN_CONNECTION))
+    {
+      free(b);
+      return(0);
+    }
+  free(b);
   v->server_fd = accept(v->sockfd, (struct sockaddr*)&v->s_in_client,
                         &v->s_in_size);
   v->client_ip = inet_ntoa(v->s_in_client.sin_addr);
-  getline(&buff, &s, f);
-  printf("%s", buff);
   if (flg)
     {
       if (get_data(v, flg))

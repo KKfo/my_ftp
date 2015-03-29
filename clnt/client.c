@@ -5,7 +5,7 @@
 ** Login   <flores_a@epitech.eu>
 ** 
 ** Started on  Sun Mar 22 14:45:32 2015 
-** Last update Sun Mar 29 16:39:34 2015 
+** Last update Sun Mar 29 17:44:10 2015 
 */
 
 #include                "../include/defs.h"
@@ -31,7 +31,7 @@ int                     get_string(FILE *sock_stream, char **buff,
   size_t                n;
   ssize_t               r;
 
-  n = 1024;
+  n = 1023;
   r = 0;
   if ((r = getline(buff, &n, sock_stream)) == -1)
       return(-1);
@@ -69,6 +69,7 @@ char            **tokenize(char *str, char **tab)
       /* Add realloc routine */
     }
   *(str - 1) = '\0';
+  tab[i + 1] = NULL;  /* ??????? */
   return(tab);
 }
 
@@ -103,6 +104,7 @@ char            execute_instr(char **tab, FILE *sock_stream, char *buff)
 
 int             handle_commands(int fd)
 {
+  char          *input;
   ssize_t       r;
   char          *buff;
   char          **mtab = NULL;
@@ -113,6 +115,7 @@ int             handle_commands(int fd)
   tab = NULL;
   if ((mtab = malloc(sizeof(char*) * 1024)) == NULL
       || (buff = malloc(sizeof(char) * 1024)) == NULL
+      || (input = malloc(sizeof(char) * 1024)) == NULL
       || (sock_stream = fdopen(fd, "r+")) == NULL
       || (get_string(sock_stream, &buff, 3, 1)) == -1)
     return(1);
@@ -124,12 +127,12 @@ int             handle_commands(int fd)
   while(!execute_instr(tab, sock_stream, buff) && r)
     {
       write(1, "\x1B[92mmy_ftp-> \x1B[0m", 18);
-      if ((r = get_string(stdin, &buff, 1024, 0)) == -1)
+      if ((r = get_string(stdin, &input, 1024, 0)) == -1)
         {
           perror("get_line");
           return(EXIT_FAILURE);
         }
-      tab = tokenize(buff, mtab);
+      tab = tokenize(input, mtab);
     }
   free(buff);
   free(mtab);
