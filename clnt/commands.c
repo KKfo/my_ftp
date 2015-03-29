@@ -5,7 +5,7 @@
 ** Login   <flores_a@epitech.eu>
 ** 
 ** Started on  Wed Mar 25 20:24:38 2015 
-** Last update Sun Mar 29 19:39:42 2015 
+** Last update Sun Mar 29 21:07:58 2015 
 */
 
 #include        "../include/defs.h"
@@ -15,22 +15,14 @@ int             ls(char **t, FILE *f, char *buff)
   int           r;
   int           p;
 
-  /* int           passive; */
-
-  /* passive = 0; */
-  /* if(passive) */
-  /*   send_passv_cmd(); */
-  /* else */
-  /* { */
-    if ((p = send_port_cmd(f, buff)) == -1)
-      {
-        return(0);
-      }
-    else if(p == EXIT_FAILURE)
-      {
-        return(EXIT_FAILURE);
-      }
-  /* } */
+  if ((p = send_port_cmd(f, buff)) == -1)
+    {
+      return(0);
+    }
+  else if(p == EXIT_FAILURE)
+    {
+      return(EXIT_FAILURE);
+    }
   if (t[1])
     {
       snprintf(buff, 1023, "LIST %s\r\n", t[1]);
@@ -98,7 +90,7 @@ int             get(char **t, FILE *f, char *buff)
     }
    else
     {
-      printf("usage: cd remote-directory\n");
+      printf("usage: get remote-directory\n");
       return (0);
     }
   if (listen_to_server('g', t, p, f))
@@ -111,9 +103,37 @@ int             get(char **t, FILE *f, char *buff)
 
 int             put(char **t, FILE *f, char *buff)
 {
-  UNUSED(t);
-  UNUSED(f);
- 
+  int           p;
+
+  write(fileno(f), "TYPE I\r\n", 8);
+  get_string(f, &buff, 3, 0);
+  if ((p = send_port_cmd(f, buff)) == -1)
+    {
+      return(0);
+    }
+  else if(p == EXIT_FAILURE)
+    {
+      return(EXIT_FAILURE);
+    }
+  if (t[1])
+    {
+      snprintf(buff, 1023, "STOR %s\r\n", t[1]);
+      if (write(fileno(f), buff, strlen(buff)) < 0)
+        {
+          perror("write");
+          return(1);
+        }
+    }
+   else
+    {
+      printf("usage: put remote-directory\n");
+      return (0);
+    }
+  if (listen_to_server(0, t, p, f))
+    {
+      return (0);
+    }
+  get_string(f, &buff, 3, 1);
   return (0);
 }
 
