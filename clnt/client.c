@@ -5,7 +5,7 @@
 ** Login   <flores_a@epitech.eu>
 ** 
 ** Started on  Sun Mar 22 14:45:32 2015 
-** Last update Sun Mar 29 21:31:24 2015 
+** Last update Sun Mar 29 23:00:45 2015 
 */
 
 #include                "../include/defs.h"
@@ -17,6 +17,7 @@ int             quit(char **t, FILE *f, char *buff)
   char          *get;
 
   UNUSED(t);
+  UNUSED(buff);
   get = NULL;
   s = 0;
   write(fileno(f), "QUIT\r\n", 6);
@@ -74,7 +75,6 @@ char            **tokenize(char *str, char **tab)
 
 char            execute_instr(char **tab, FILE *sock_stream, char *buff)
 {
-  int           r;
   int           i;
   t_aptr        cmd_ptr[7] = {quit, auth, ls
                               , cd, get, put

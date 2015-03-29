@@ -5,7 +5,7 @@
 ** Login   <flores_a@epitech.eu>
 ** 
 ** Started on  Wed Mar 25 20:49:40 2015 
-** Last update Wed Mar 25 22:42:15 2015 
+** Last update Sun Mar 29 23:18:31 2015 
 */
 
 #include        "../include/defs.h"
@@ -15,7 +15,14 @@ int             need_password(char **buffer, FILE* sock_stream)
   char          *pass;
 
   pass = getpass("(password): ");
-  fprintf(sock_stream, "PASS %s\r\n", pass);
+  if (pass)
+    {
+      fprintf(sock_stream, "PASS %s\r\n", pass);
+    }
+  else
+    {
+      fprintf(sock_stream, "PASS\r\n");
+    }
   fflush(sock_stream);
   get_string(sock_stream, buffer, 3, 1);
   if (!strcmp(*buffer, LOGGED_IN))

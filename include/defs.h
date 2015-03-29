@@ -5,7 +5,7 @@
 ** Login   <flores_a@epitech.eu>
 ** 
 ** Started on  Sat Mar 21 15:01:32 2015 
-** Last update Sun Mar 29 19:02:56 2015 
+** Last update Sun Mar 29 23:02:45 2015 
 */
 
 #ifndef                         DEFS_H_
@@ -25,30 +25,20 @@
 #include                        <netdb.h>
 #include                        <netinet/in.h>
 #include                        <unistd.h>
-
-/* #define MAXSIZE                 512 */
-/* #define ACK                     2 */
-/* #define NACK                    3 */
-/* #define REQUESTFILE             100 */
-/* #define CMD_NOT_SUPPORTED       150 */
-/* #define COMND_SUP               160 */
-/* #define BADFILENAME             200 */
-/* #define FILENAMEOK              400 */
-/* #define STARTTRANSFER           500 */
-/* #define CLIENT_PORT_ID          6086 */
-
-#define                 OPEN_CONNECTION "150"
-#define                 SUCCESS "200"
-#define                 CON_ESTAB "220"
-#define                 LOGGED_IN "230"
-#define                 bad_pass "332"
-#define                 action_completed "250"
-#define                 NEED_PASS "331"
-#define                 NOT_L_IN "530"
-#define                 UNUSED(x) (void)(x)
+#define                         OPEN_CONNECTION "150"
+#define                         SUCCESS "200"
+#define                         CON_ESTAB "220"
+#define                         LOGGED_IN "230"
+#define                         bad_pass "332"
+#define                         action_completed "250"
+#define                         NEED_PASS "331"
+#define                         NOT_L_IN "530"
+#define                         UNUSED(x) (void)(x)
 
 typedef int (*t_aptr)(char **, FILE *, char*);
 typedef int (*t_pt)(char **,FILE *);
+typedef int (*t_action)(char *, int);
+
 typedef struct                  s_vars
 {
   struct sockaddr_in            s_in;
@@ -63,12 +53,16 @@ typedef struct                  s_vars
   char                          *client_ip;
 }                               t_vars;
 
+int                             suser(char *user, int fd);
+int                             pass(char *pass, int fd);
 int                             send_data(t_vars *v);
 int                             get_data(t_vars *v, char flg);
+int                             send_port_cmd(FILE *f, char *b);
 int                             listen_to_server(char, char**, int, FILE*);
 int                             need_password(char**, FILE*);
 int                             logged_in(char **, FILE*);
-int                             not_logged_in(char **buffer, FILE* sock_stream);
+int                             not_logged_in(char **buffer,
+                                              FILE* sock_stream);
 int                             get_string(FILE *sock_stream,
                                            char **buff, size_t l,
                                            char s);
@@ -84,7 +78,8 @@ char                            init_socket(int *fd);
 void                            init_sin(struct sockaddr_in *s_in,
                                          int port, char *ip);
 int                             connect_to_server(struct sockaddr *s_in,
-                                                  int *sockfd, int port, char *ip);
+                                                  int *sockfd, int port,
+                                                  char *ip);
 int                             readn(int sd,char *ptr,int size);
 int                             writen(int sd,char *ptr,int size);
 int                             process_clients(t_vars *v);

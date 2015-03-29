@@ -5,7 +5,7 @@
 ## Login   <flores_a@epitech.eu>
 ## 
 ## Started on  Sat Mar 21 14:44:31 2015 
-## Last update Sun Mar 29 18:53:03 2015 
+## Last update Sun Mar 29 22:57:19 2015 
 ##
 
 CLNT_SRC =		clnt/main.c \
@@ -19,7 +19,8 @@ CLNT_SRC =		clnt/main.c \
 				clnt/send_data.c \
 
 SRVR_SRC =		server/main.c \
-			 server/server.c
+				server/server.c \
+				server/actions.c \
 
 CLNT_OBJ =		$(CLNT_SRC:.c=.o)
 
@@ -33,7 +34,7 @@ CLNT =		client
 
 CC =		gcc
 
-CFLAGS =	-g # -Wall -Werror -Wextra -pedantic
+CFLAGS =	-Wall -Werror -Wextra -pedantic
 
 RM =		rm -f
 

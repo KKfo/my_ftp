@@ -5,7 +5,7 @@
 ** Login   <flores_a@epitech.eu>
 ** 
 ** Started on  Sun Mar 22 17:01:56 2015 
-** Last update Sun Mar 29 15:27:53 2015 
+** Last update Sun Mar 29 22:53:31 2015 
 */
 
 #include                "../include/defs.h"
@@ -52,7 +52,7 @@ int                     connect_to_server(struct sockaddr *s_in, int *sockfd,
       perror("connect");
       return (1);  
     }
-  return(0);
+  return (0);
 }
 
 int                     main(int argc, char **argv)
@@ -71,7 +71,6 @@ int                     main(int argc, char **argv)
          "\n\nConnected to %s\n", argv[1]);
   if (handle_commands(cmd_sock_fd))
     {
-      printf("error handle_commands\n");  /* TEMPORARY */
       return (EXIT_FAILURE);
     }
   if (close(cmd_sock_fd) == -1)

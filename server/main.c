@@ -5,7 +5,7 @@
 ** Login   <flores_a@epitech.eu>
 ** 
 ** Started on  Sun Mar 22 16:53:59 2015 
-** Last update Sat Mar 28 13:00:40 2015 
+** Last update Sun Mar 29 22:55:57 2015 
 */
 
 #include                "../include/defs.h"
@@ -73,16 +73,6 @@ char                    do_listen(int sockfd)
     }
   return (0);
 }
-
-char                    do_accept(int *c_fd,
-                                  int fd,
-                                  struct sockaddr* s_in_client,
-                                  socklen_t *size)
-{
-   *c_fd = accept(fd, s_in_client, size);
-   return(0);
-}
-
 
 int                     main(int argc, char **argv)
 {

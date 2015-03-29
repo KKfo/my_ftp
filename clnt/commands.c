@@ -5,7 +5,7 @@
 ** Login   <flores_a@epitech.eu>
 ** 
 ** Started on  Wed Mar 25 20:24:38 2015 
-** Last update Sun Mar 29 21:28:44 2015 
+** Last update Sun Mar 29 23:01:47 2015 
 */
 
 #include        "../include/defs.h"
@@ -26,7 +26,7 @@ int             ls(char **t, FILE *f, char *buff)
   if (t[1])
     {
       snprintf(buff, 1023, "LIST %s\r\n", t[1]);
-      if (r = write(fileno(f), buff, strlen(buff)) < 0)
+      if ((r = write(fileno(f), buff, strlen(buff))) < 0)
         {
           perror("write");
           return(1);
@@ -34,7 +34,7 @@ int             ls(char **t, FILE *f, char *buff)
     }
   else
     {
-      if (r = write(fileno(f), "LIST \r\n", 7) < 0)
+      if ((r = write(fileno(f), "LIST \r\n", 7)) < 0)
         {
           perror("write");
           return(1);
