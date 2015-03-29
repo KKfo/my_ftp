@@ -5,10 +5,25 @@
 ** Login   <flores_a@epitech.eu>
 ** 
 ** Started on  Sun Mar 22 14:45:32 2015 
-** Last update Sat Mar 28 17:02:26 2015 
+** Last update Sun Mar 29 16:39:34 2015 
 */
 
 #include                "../include/defs.h"
+
+
+int             quit(char **t, FILE *f, char *buff)
+{
+  size_t        s;
+  char          *get;
+
+  UNUSED(t);
+  get = NULL;
+  s = 0;
+  write(fileno(f), "QUIT\r\n", 6);
+  getline(&get, &s, f);
+  printf("%s", get);
+  return (1);
+}
 
 int                     get_string(FILE *sock_stream, char **buff,
                                    size_t l, char s)
@@ -57,8 +72,9 @@ char            **tokenize(char *str, char **tab)
   return(tab);
 }
 
-char            execute_instr(char **tab, FILE *sock_stream)
+char            execute_instr(char **tab, FILE *sock_stream, char *buff)
 {
+  int           r;
   int           i;
   t_aptr        cmd_ptr[7] = {quit, auth, ls
                               , cd, get, put
@@ -74,16 +90,15 @@ char            execute_instr(char **tab, FILE *sock_stream)
     i++;
   if (i != 7)
     {
-      if (cmd_ptr[i](tab, sock_stream))
+      if (cmd_ptr[i](tab, sock_stream, buff) == EXIT_FAILURE)
         {
-          printf("error execute instr\n");
-          return(1);
+          return(EXIT_FAILURE);
         }
     }
   else
     printf("-> error: command not found\n");
   bzero(tab, 1024);
-  return (0);
+  return (EXIT_SUCCESS);
 }
 
 int             handle_commands(int fd)
@@ -103,20 +118,20 @@ int             handle_commands(int fd)
     return(1);
   if (!strcmp(buff, CON_ESTAB))
     {
-      if (auth(NULL, sock_stream))
+      if (auth(NULL, sock_stream, buff))
         printf("auth error\n");
     }
-  while(!execute_instr(tab, sock_stream) && r)
+  while(!execute_instr(tab, sock_stream, buff) && r)
     {
       write(1, "\x1B[92mmy_ftp-> \x1B[0m", 18);
       if ((r = get_string(stdin, &buff, 1024, 0)) == -1)
         {
           perror("get_line");
-          return(1);
+          return(EXIT_FAILURE);
         }
       tab = tokenize(buff, mtab);
     }
   free(buff);
   free(mtab);
-  return (0);
+  return (EXIT_SUCCESS);
 }

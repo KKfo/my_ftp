@@ -5,7 +5,7 @@
 ** Login   <flores_a@epitech.eu>
 ** 
 ** Started on  Sun Mar 22 17:01:56 2015 
-** Last update Sat Mar 28 16:53:40 2015 
+** Last update Sun Mar 29 15:27:53 2015 
 */
 
 #include                "../include/defs.h"
@@ -50,7 +50,7 @@ int                     connect_to_server(struct sockaddr *s_in, int *sockfd,
   if(connect(*sockfd, s_in, sizeof(*s_in)) == -1)
     {
       perror("connect");
-      return(1);  
+      return (1);  
     }
   return(0);
 }
@@ -65,19 +65,19 @@ int                     main(int argc, char **argv)
     return (EXIT_FAILURE);
   if (connect_to_server(&s_in, &cmd_sock_fd,
                         port, argv[1]))
-    return(EXIT_FAILURE);
+    return (EXIT_FAILURE);
   printf("\n[\x1B[34mEpitech \x1B[0m"
          "\x1B[93mmy_ftp\x1B[0m 1.0]"
          "\n\nConnected to %s\n", argv[1]);
   if (handle_commands(cmd_sock_fd))
     {
       printf("error handle_commands\n");  /* TEMPORARY */
-      return(EXIT_FAILURE);
+      return (EXIT_FAILURE);
     }
   if (close(cmd_sock_fd) == -1)
     {
       perror("close");
-      return(EXIT_FAILURE);
+      return (EXIT_FAILURE);
     }
   return (EXIT_SUCCESS);
 }

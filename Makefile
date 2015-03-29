@@ -5,14 +5,14 @@
 ## Login   <flores_a@epitech.eu>
 ## 
 ## Started on  Sat Mar 21 14:44:31 2015 
-## Last update Fri Mar 27 23:44:30 2015 
+## Last update Sun Mar 29 15:36:54 2015 
 ##
 
 CLNT_SRC =		clnt/main.c \
 				clnt/client.c \
+				clnt/auth_cmds.c \
 				clnt/commands.c \
-				clnt/commands2.c \
-				clnt/commands3.c \
+				clnt/connection_commands.c \
 				clnt/responses.c \
 				clnt/active_mode.c \
 

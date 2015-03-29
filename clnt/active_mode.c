@@ -5,7 +5,7 @@
 ** Login   <flores_a@epitech.eu>
 ** 
 ** Started on  Fri Mar 27 23:43:08 2015 
-** Last update Sun Mar 29 15:03:41 2015 
+** Last update Sun Mar 29 16:27:47 2015 
 */
 
 #include        "../include/defs.h"
@@ -57,11 +57,18 @@ int                     send_data(t_vars *v)
   return (0);
 }
 
-int                     accept_data(t_vars *v, char flg)
+int                     accept_data(t_vars *v, char flg, FILE *f)
 {
+  char                  *buff;
+  size_t                s;
+
+  s = 0;
+  buff = NULL;
   v->server_fd = accept(v->sockfd, (struct sockaddr*)&v->s_in_client,
                         &v->s_in_size);
   v->client_ip = inet_ntoa(v->s_in_client.sin_addr);
+  getline(&buff, &s, f);
+  printf("%s", buff);
   if (flg)
     {
       if (get_data(v, flg))
@@ -93,7 +100,8 @@ int                     accept_data(t_vars *v, char flg)
   return (0);
 }
 
-int                     listen_to_server(char flg, char *file, int port)
+int                     listen_to_server(char flg, char *file,
+                                         int port, FILE *f)
 {
   t_vars                v;
 
@@ -109,6 +117,6 @@ int                     listen_to_server(char flg, char *file, int port)
                  v.s_in_size)
       || do_listen(v.sockfd))
     return (EXIT_FAILURE);
-  accept_data(&v, flg);
+  accept_data(&v, flg, f);
   return (0);
 }
