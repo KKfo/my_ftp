@@ -5,7 +5,7 @@
 ** Login   <flores_a@epitech.eu>
 ** 
 ** Started on  Wed Mar 25 20:24:38 2015 
-** Last update Sun Mar 29 21:07:58 2015 
+** Last update Sun Mar 29 21:28:44 2015 
 */
 
 #include        "../include/defs.h"
@@ -103,6 +103,7 @@ int             get(char **t, FILE *f, char *buff)
 
 int             put(char **t, FILE *f, char *buff)
 {
+  FILE          *fd;
   int           p;
 
   write(fileno(f), "TYPE I\r\n", 8);
@@ -117,7 +118,17 @@ int             put(char **t, FILE *f, char *buff)
     }
   if (t[1])
     {
-      snprintf(buff, 1023, "STOR %s\r\n", t[1]);
+      printf("TEST : %s", t[1]);
+      if ((fd = fopen(t[1], "r")) == NULL)
+        {
+          perror("fopen");
+          return (0);
+        }
+      fclose(fd);
+      if (t[2])
+        snprintf(buff, 1023, "STOR %s\r\n", t[2]);
+      else
+        snprintf(buff, 1023, "STOR %s\r\n", t[1]);
       if (write(fileno(f), buff, strlen(buff)) < 0)
         {
           perror("write");

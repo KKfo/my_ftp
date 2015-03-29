@@ -5,7 +5,7 @@
 ** Login   <flores_a@epitech.eu>
 ** 
 ** Started on  Sun Mar 22 14:45:32 2015 
-** Last update Sun Mar 29 17:44:10 2015 
+** Last update Sun Mar 29 21:31:24 2015 
 */
 
 #include                "../include/defs.h"
@@ -66,10 +66,9 @@ char            **tokenize(char *str, char **tab)
         }
       else
         str++;
-      /* Add realloc routine */
     }
   *(str - 1) = '\0';
-  tab[i + 1] = NULL;  /* ??????? */
+  tab[i + 1] = NULL;
   return(tab);
 }
 
