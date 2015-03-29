@@ -5,7 +5,7 @@
 ** Login   <flores_a@epitech.eu>
 ** 
 ** Started on  Sun Mar 22 14:45:32 2015 
-** Last update Sun Mar 29 23:00:45 2015 
+** Last update Sat Mar 28  01:03:34 2015 
 */
 
 #include                "../include/defs.h"
@@ -35,7 +35,7 @@ int                     get_string(FILE *sock_stream, char **buff,
   n = 1023;
   r = 0;
   if ((r = getline(buff, &n, sock_stream)) == -1)
-      return(-1);
+      return (-1);
   if (s)
     {
       if ((printf("server: %s", *buff)) < 0)
@@ -43,7 +43,7 @@ int                     get_string(FILE *sock_stream, char **buff,
       fflush(stdout);
       bzero(&(*buff)[l], r - l);
     }
-  return(r);
+  return (r);
 }
 
 char            **tokenize(char *str, char **tab)
@@ -60,21 +60,23 @@ char            **tokenize(char *str, char **tab)
     {
       if ((*str == ' ' || *str == '\t')
           && (*(str + 1) != ' '
-              || *(str + 1) != '\t'))
+              && *(str + 1) != '\t'))
         {
           *str = '\0';
           tab[i] = ++str;
+          ++i;
         }
       else
         str++;
     }
   *(str - 1) = '\0';
-  tab[i + 1] = NULL;
-  return(tab);
+  tab[i] = NULL;
+  return (tab);
 }
 
-char            execute_instr(char **tab, FILE *sock_stream, char *buff)
+int            execute_instr(char **tab, FILE *sock_stream, char *buff)
 {
+  int           r;
   int           i;
   t_aptr        cmd_ptr[7] = {quit, auth, ls
                               , cd, get, put
@@ -86,13 +88,13 @@ char            execute_instr(char **tab, FILE *sock_stream, char *buff)
   i = 0;
   if (tab == NULL || *tab == NULL || **tab == '\0')
     return (0);
-  while(cmds[i] && strcmp(cmds[i], tab[0]))
+  while (cmds[i] && strcmp(cmds[i], tab[0]))
     i++;
   if (i != 7)
     {
-      if (cmd_ptr[i](tab, sock_stream, buff) == EXIT_FAILURE)
+      if ((r = cmd_ptr[i](tab, sock_stream, buff)) == EXIT_FAILURE)
         {
-          return(EXIT_FAILURE);
+          return (EXIT_FAILURE);
         }
     }
   else
@@ -123,17 +125,21 @@ int             handle_commands(int fd)
       if (auth(NULL, sock_stream, buff))
         printf("auth error\n");
     }
-  while(!execute_instr(tab, sock_stream, buff) && r)
+  while (!execute_instr(tab, sock_stream, buff) && r)
     {
       write(1, "\x1B[92mmy_ftp-> \x1B[0m", 18);
       if ((r = get_string(stdin, &input, 1024, 0)) == -1)
         {
+          free(buff);
+          free(mtab);
+          free(input);
           perror("get_line");
-          return(EXIT_FAILURE);
+          return (EXIT_FAILURE);
         }
       tab = tokenize(input, mtab);
     }
   free(buff);
   free(mtab);
+  free(input);
   return (EXIT_SUCCESS);
 }

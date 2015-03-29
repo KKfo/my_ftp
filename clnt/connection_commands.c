@@ -5,14 +5,10 @@
 ** Login   <flores_a@epitech.eu>
 ** 
 ** Started on  Wed Mar 25 20:25:32 2015 
-** Last update Sun Mar 29 23:03:28 2015 
+** Last update Sat Mar 28  01:14:23 2015 
 */
 
 #include                "../include/defs.h"
-
-/* int             passv() */
-/* { */
-/* } */
 
 int                     send_port_cmd(FILE *f, char *b)
 {

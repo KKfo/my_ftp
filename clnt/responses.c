@@ -5,7 +5,7 @@
 ** Login   <flores_a@epitech.eu>
 ** 
 ** Started on  Wed Mar 25 20:49:40 2015 
-** Last update Sun Mar 29 23:18:31 2015 
+** Last update Sat Mar 28  12:23:03 2015 
 */
 
 #include        "../include/defs.h"
@@ -32,18 +32,18 @@ int             need_password(char **buffer, FILE* sock_stream)
   return (1);
 }
 
-int     logged_in(char **buffer, FILE* sock_stream)
+int     	logged_in(char **buffer, FILE* sock_stream)
 {
   UNUSED(sock_stream);
   UNUSED(buffer);
   printf("client: user logged in\n");
-  return(0);
+  return (0);
 }
 
-int     not_logged_in(char **buffer, FILE* sock_stream)
+int     	not_logged_in(char **buffer, FILE* sock_stream)
 {
   UNUSED(buffer);
   UNUSED(sock_stream);
   printf("client: user could not log in\n");
-  return(0);
+  return (0);
 }

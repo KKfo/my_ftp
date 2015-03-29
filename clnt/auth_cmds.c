@@ -5,17 +5,17 @@
 ** Login   <flores_a@epitech.eu>
 ** 
 ** Started on  Wed Mar 25 20:10:54 2015 
-** Last update Sun Mar 29 23:08:04 2015 
+** Last update Sat Mar 28  02:34:34 2015 
 */
 
 #include        "../include/defs.h"
 
-int     connection_established(char **buffer, FILE* sock_stream)
+int     	connection_established(char **buffer, FILE* sock_stream)
 {
   UNUSED(buffer);
   UNUSED(sock_stream);
   printf("connest : Cool!\n");
-  return(0);
+  return (0);
 }
 
 int             user(char *user, FILE *sock_stream, char *buffer)
@@ -38,7 +38,7 @@ int             user(char *user, FILE *sock_stream, char *buffer)
   if (i != 4)
     if (action[i](&buffer, sock_stream))
       {
-        return(1);
+        return (1);
       }
   return (0);
 }
@@ -55,7 +55,7 @@ int             auth(char **tab, FILE *sock_stream, char* buffer)
       printf("(username): ");
       fflush(stdout);
       if ((r = getline(&cuser, &len, stdin)) == -1)
-        return(1);
+        return (1);
       cuser[r - 1] = '\0';
       user(cuser, sock_stream, buffer);
       free(cuser);

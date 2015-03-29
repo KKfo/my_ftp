@@ -5,7 +5,7 @@
 ## Login   <flores_a@epitech.eu>
 ## 
 ## Started on  Sat Mar 21 14:44:31 2015 
-## Last update Sun Mar 29 22:57:19 2015 
+## Last update Thu Apr  2 11:36:58 2015 
 ##
 
 CLNT_SRC =		clnt/main.c \
@@ -17,10 +17,13 @@ CLNT_SRC =		clnt/main.c \
 				clnt/active_mode.c \
 				clnt/get_data.c \
 				clnt/send_data.c \
+				clnt/extra.c \
 
 SRVR_SRC =		server/main.c \
 				server/server.c \
 				server/actions.c \
+				server/active_mode.c \
+				server/do_actions.c \
 
 CLNT_OBJ =		$(CLNT_SRC:.c=.o)
 

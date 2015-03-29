@@ -5,7 +5,7 @@
 ** Login   <flores_a@epitech.eu>
 ** 
 ** Started on  Wed Mar 25 20:24:38 2015 
-** Last update Sun Mar 29 23:01:47 2015 
+** Last update Thu Apr  2 10:00:16 2015 
 */
 
 #include        "../include/defs.h"
@@ -17,11 +17,11 @@ int             ls(char **t, FILE *f, char *buff)
 
   if ((p = send_port_cmd(f, buff)) == -1)
     {
-      return(0);
+      return (0);
     }
   else if(p == EXIT_FAILURE)
     {
-      return(EXIT_FAILURE);
+      return (EXIT_FAILURE);
     }
   if (t[1])
     {
@@ -29,7 +29,7 @@ int             ls(char **t, FILE *f, char *buff)
       if ((r = write(fileno(f), buff, strlen(buff))) < 0)
         {
           perror("write");
-          return(1);
+          return (1);
         }
     }
   else
@@ -37,7 +37,7 @@ int             ls(char **t, FILE *f, char *buff)
       if ((r = write(fileno(f), "LIST \r\n", 7)) < 0)
         {
           perror("write");
-          return(1);
+          return (1);
         }
     }
   listen_to_server('l', NULL, p, f);
@@ -53,7 +53,7 @@ int             cd(char **t, FILE *f, char *buff)
       if (write(fileno(f), buff, strlen(buff)) < 0)
         {
           perror("write");
-          return(1);
+          return (1);
         }
     }
   else
@@ -73,11 +73,11 @@ int             get(char **t, FILE *f, char *buff)
   get_string(f, &buff, 3, 0);
   if ((p = send_port_cmd(f, buff)) == -1)
     {
-      return(0);
+      return (0);
     }
   else if(p == EXIT_FAILURE)
     {
-      return(EXIT_FAILURE);
+      return (EXIT_FAILURE);
     }
   if (t[1])
     {
@@ -85,7 +85,7 @@ int             get(char **t, FILE *f, char *buff)
       if (write(fileno(f), buff, strlen(buff)) < 0)
         {
           perror("write");
-          return(1);
+          return (1);
         }
     }
    else
@@ -103,38 +103,16 @@ int             get(char **t, FILE *f, char *buff)
 
 int             put(char **t, FILE *f, char *buff)
 {
-  FILE          *fd;
   int           p;
 
   write(fileno(f), "TYPE I\r\n", 8);
   get_string(f, &buff, 3, 0);
   if ((p = send_port_cmd(f, buff)) == -1)
-    {
-      return(0);
-    }
+      return (0);
   else if(p == EXIT_FAILURE)
-    {
-      return(EXIT_FAILURE);
-    }
+      return (EXIT_FAILURE);
   if (t[1])
-    {
-      printf("TEST : %s", t[1]);
-      if ((fd = fopen(t[1], "r")) == NULL)
-        {
-          perror("fopen");
-          return (0);
-        }
-      fclose(fd);
-      if (t[2])
-        snprintf(buff, 1023, "STOR %s\r\n", t[2]);
-      else
-        snprintf(buff, 1023, "STOR %s\r\n", t[1]);
-      if (write(fileno(f), buff, strlen(buff)) < 0)
-        {
-          perror("write");
-          return(1);
-        }
-    }
+      send_stor(t, f, buff);
    else
     {
       printf("usage: put remote-directory\n");

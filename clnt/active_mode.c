@@ -5,7 +5,7 @@
 ** Login   <flores_a@epitech.eu>
 ** 
 ** Started on  Fri Mar 27 23:43:08 2015 
-** Last update Sun Mar 29 19:37:33 2015 
+** Last update Sat Mar 28  01:40:34 2015 
 */
 
 #include        "../include/defs.h"
@@ -22,7 +22,7 @@ char                    do_bind(int sockfd,
           return(1);
         }
       perror("bind");
-      return(1);
+      return (1);
     }
   return (0);  
 }
@@ -34,10 +34,10 @@ char                    do_listen(int sockfd)
       if ((close(sockfd)) == -1)
         {
           perror("close");
-          return(1);
+          return (1);
         }
       perror("listen");
-      return(1);
+      return (1);
     }
   return (0);
 }
@@ -52,7 +52,7 @@ int                     accept_data(t_vars *v, char flg, FILE *f)
   if (strcmp(b, OPEN_CONNECTION))
     {
       free(b);
-      return(1);
+      return (1);
     }
   free(b);
   v->server_fd = accept(v->sockfd, (struct sockaddr*)&v->s_in_client,
@@ -108,7 +108,7 @@ int                     listen_to_server(char flg, char **args,
     return (EXIT_FAILURE);
   if (accept_data(&v, flg, f))
     {
-      return(1);
+      return (1);
     }
   return (0);
 }

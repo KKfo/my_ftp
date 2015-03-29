@@ -5,12 +5,12 @@
 ** Login   <flores_a@epitech.eu>
 ** 
 ** Started on  Sun Mar 22 17:01:56 2015 
-** Last update Sun Mar 29 22:53:31 2015 
+** Last update Sat Mar 28  01:30:00 2015 
 */
 
-#include                "../include/defs.h"
+#include        "../include/defs.h"
 
-char                    check_args(int ac, char *av, int *p)
+char            check_args(int ac, char *av, int *p)
 {
   if (!av || ac != 3 || !(*p = atoi(av)))
     {
@@ -47,10 +47,10 @@ int                     connect_to_server(struct sockaddr *s_in, int *sockfd,
   ((struct sockaddr_in*)s_in)->sin_addr.s_addr = inet_addr(ip);
   if (init_socket(sockfd))
     return (1);
-  if(connect(*sockfd, s_in, sizeof(*s_in)) == -1)
+  if (connect(*sockfd, s_in, sizeof(*s_in)) == -1)
     {
       perror("connect");
-      return (1);  
+      return (1);
     }
   return (0);
 }

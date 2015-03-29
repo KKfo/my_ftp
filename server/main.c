@@ -5,7 +5,7 @@
 ** Login   <flores_a@epitech.eu>
 ** 
 ** Started on  Sun Mar 22 16:53:59 2015 
-** Last update Sun Mar 29 22:55:57 2015 
+** Last update Sat Mar 28  17:28:23 2015 
 */
 
 #include                "../include/defs.h"
@@ -77,7 +77,8 @@ char                    do_listen(int sockfd)
 int                     main(int argc, char **argv)
 {
   t_vars                v;
-  
+
+  memset(&v.s_in, 0, sizeof(v.s_in));
   if ((check_args(argc, argv[1], &v.port)))
     return (EXIT_FAILURE);
   v.s_in_size = sizeof(v.s_in);
