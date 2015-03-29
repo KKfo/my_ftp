@@ -5,7 +5,7 @@
 ** Login   <flores_a@epitech.eu>
 ** 
 ** Started on  Fri Mar 27 23:43:08 2015 
-** Last update Sun Mar 29 17:50:07 2015 
+** Last update Sun Mar 29 19:37:33 2015 
 */
 
 #include        "../include/defs.h"
@@ -42,24 +42,6 @@ char                    do_listen(int sockfd)
   return (0);
 }
 
-int                     get_data(t_vars *v, char flg)
-{
-  size_t                r;
-  char                  buff[2048];
-
-  if (flg == 'l')
-    {
-      while (r = read(v->server_fd, buff, 2048))
-        write(1, buff, r);
-    }
-  return (0);
-}
-
-int                     send_data(t_vars *v)
-{
-  return (0);
-}
-
 int                     accept_data(t_vars *v, char flg, FILE *f)
 {
   char                  *b;
@@ -70,7 +52,7 @@ int                     accept_data(t_vars *v, char flg, FILE *f)
   if (strcmp(b, OPEN_CONNECTION))
     {
       free(b);
-      return(0);
+      return(1);
     }
   free(b);
   v->server_fd = accept(v->sockfd, (struct sockaddr*)&v->s_in_client,
@@ -107,13 +89,13 @@ int                     accept_data(t_vars *v, char flg, FILE *f)
   return (0);
 }
 
-int                     listen_to_server(char flg, char *file,
+int                     listen_to_server(char flg, char **args,
                                          int port, FILE *f)
 {
   t_vars                v;
 
   memset(&v, 0, sizeof(v));
-  v.file = file;
+  v.args = args;
   v.s_in_size = sizeof(v.s_in);
   v.s_in.sin_family = AF_INET;
   v.s_in.sin_port = htons(port);
@@ -124,6 +106,9 @@ int                     listen_to_server(char flg, char *file,
                  v.s_in_size)
       || do_listen(v.sockfd))
     return (EXIT_FAILURE);
-  accept_data(&v, flg, f);
+  if (accept_data(&v, flg, f))
+    {
+      return(1);
+    }
   return (0);
 }

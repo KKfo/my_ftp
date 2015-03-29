@@ -5,7 +5,7 @@
 ** Login   <flores_a@epitech.eu>
 ** 
 ** Started on  Sat Mar 21 15:01:32 2015 
-** Last update Sun Mar 29 17:12:40 2015 
+** Last update Sun Mar 29 19:02:56 2015 
 */
 
 #ifndef                         DEFS_H_
@@ -59,11 +59,13 @@ typedef struct                  s_vars
   socklen_t                     s_in_size;
   int                           client_fd;
   int                           server_fd;
-  char                          *file;
+  char                          **args;
   char                          *client_ip;
 }                               t_vars;
 
-int                             listen_to_server(char, char*, int, FILE*);
+int                             send_data(t_vars *v);
+int                             get_data(t_vars *v, char flg);
+int                             listen_to_server(char, char**, int, FILE*);
 int                             need_password(char**, FILE*);
 int                             logged_in(char **, FILE*);
 int                             not_logged_in(char **buffer, FILE* sock_stream);

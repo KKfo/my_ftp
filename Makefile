@@ -5,7 +5,7 @@
 ## Login   <flores_a@epitech.eu>
 ## 
 ## Started on  Sat Mar 21 14:44:31 2015 
-## Last update Sun Mar 29 15:36:54 2015 
+## Last update Sun Mar 29 18:53:03 2015 
 ##
 
 CLNT_SRC =		clnt/main.c \
@@ -15,6 +15,8 @@ CLNT_SRC =		clnt/main.c \
 				clnt/connection_commands.c \
 				clnt/responses.c \
 				clnt/active_mode.c \
+				clnt/get_data.c \
+				clnt/send_data.c \
 
 SRVR_SRC =		server/main.c \
 			 server/server.c

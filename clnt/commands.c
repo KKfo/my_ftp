@@ -5,7 +5,7 @@
 ** Login   <flores_a@epitech.eu>
 ** 
 ** Started on  Wed Mar 25 20:24:38 2015 
-** Last update Sun Mar 29 18:30:13 2015 
+** Last update Sun Mar 29 19:39:42 2015 
 */
 
 #include        "../include/defs.h"
@@ -75,9 +75,37 @@ int             cd(char **t, FILE *f, char *buff)
 
 int             get(char **t, FILE *f, char *buff)
 {
-  UNUSED(t);
-  UNUSED(f);
- 
+  int           p;
+
+  write(fileno(f), "TYPE I\r\n", 8);
+  get_string(f, &buff, 3, 0);
+  if ((p = send_port_cmd(f, buff)) == -1)
+    {
+      return(0);
+    }
+  else if(p == EXIT_FAILURE)
+    {
+      return(EXIT_FAILURE);
+    }
+  if (t[1])
+    {
+      snprintf(buff, 1023, "RETR %s\r\n", t[1]);
+      if (write(fileno(f), buff, strlen(buff)) < 0)
+        {
+          perror("write");
+          return(1);
+        }
+    }
+   else
+    {
+      printf("usage: cd remote-directory\n");
+      return (0);
+    }
+  if (listen_to_server('g', t, p, f))
+    {
+      return (0);
+    }
+  get_string(f, &buff, 3, 1);
   return (0);
 }
 
