@@ -5,7 +5,7 @@
 ** Login   <flores_a@epitech.eu>
 ** 
 ** Started on  Fri Mar 13 17:02:03 2015 
-** Last update Mon Mar 23 12:44:55 2015 
+** Last update Sat Mar 28 12:59:19 2015 
 */
 
 #include                "../include/defs.h"
@@ -15,14 +15,14 @@ int                     handle_client(int fd/* , int sockfd */)
   int r;
   char buff[1024];
 
-  if (write(fd, connection_established, 4) == -1)
+  if (write(fd, CON_ESTAB, 4) == -1)
     return (1);
   while((strcmp(buff, "")))
     {
       r = read(fd, buff, 1024);
       buff[r] = '\0';
       printf("%s", buff);
-      write(fd, need_pass, 4);
+      write(fd, NEED_PASS, 4);
     }
   return (0);
 }

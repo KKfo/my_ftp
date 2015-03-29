@@ -5,7 +5,7 @@
 ** Login   <flores_a@epitech.eu>
 ** 
 ** Started on  Wed Mar 25 20:24:38 2015 
-** Last update Sat Mar 28 04:50:51 2015 
+** Last update Sat Mar 28 18:59:50 2015 
 */
 
 #include        "../include/defs.h"
@@ -27,16 +27,16 @@ int             ls(char **t, FILE *f)
   /*   send_passv_cmd(); */
   /* else */
     active_data_connection(f, 'l', NULL);
-  if (t[1])
-    {
-      fprintf(f, "LIST %s\r\n", t[1]);
-      fflush(f);
-    }
-  else
-    {
-      fprintf(f, "LIST\r\n");
-      fflush(f);
-    }
+  /* if (t[1]) */
+  /*   { */
+  /*     fprintf(f, "LIST %s\r\n", t[1]); */
+  /*     fflush(f); */
+  /*   } */
+  /* else */
+  /*   { */
+  /*     fprintf(f, "LIST\r\n"); */
+  /*     fflush(f); */
+  /*   } */
   return (0);
 }
 

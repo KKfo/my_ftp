@@ -5,7 +5,7 @@
 ** Login   <flores_a@epitech.eu>
 ** 
 ** Started on  Fri Mar 27 23:43:08 2015 
-** Last update Sat Mar 28 05:03:27 2015 
+** Last update Sun Mar 29 00:03:07 2015 
 */
 
 #include        "../include/defs.h"
@@ -42,22 +42,13 @@ char                    do_listen(int sockfd)
   return (0);
 }
 
-char                    do_accept(int *c_fd,
-                                  int fd,
-                                  struct sockaddr* s_in_client,
-                                  socklen_t *size)
-{
-  *c_fd = accept(fd, s_in_client, size);
-  return(0);
-}
-
 int                     get_data(t_vars *v, char flg)
 {
-  char                  *buff;
+  size_t                r;
+  char                  buff[2048];
 
-  buff = malloc(1024);
-  get_string(fdopen(v->sockfd, "r+"), &buff, 1024, 1);
-  write(1, buff, 1024);
+  while (r = read(v->server_fd, buff, 2048))
+    write(1, buff, r);
   return (0);
 }
 
@@ -68,12 +59,13 @@ int                     send_data(t_vars *v)
 
 int                     accept_data(t_vars *v, char flg)
 {
-  do_accept(&v->server_fd, v->sockfd,
-            (struct sockaddr*)&v->s_in_client,
-            &v->s_in_size);
+  v->server_fd = accept(v->sockfd, (struct sockaddr*)&v->s_in_client,
+                        &v->s_in_size);
   v->client_ip = inet_ntoa(v->s_in_client.sin_addr);
+  printf("accepted connection from adress %s\n", v->client_ip);
   if (flg)
     {
+      printf("get_data\n");
       if (get_data(v, flg))
         {
           perror("get_data");
@@ -85,7 +77,7 @@ int                     accept_data(t_vars *v, char flg)
       perror("get_data");
       return (EXIT_FAILURE);
     }
-  if ((close(v->sockfd)) == -1 || (close(v->client_fd)) == -1)
+  if ((close(v->sockfd)) == -1 || (close(v->server_fd)) == -1)
     {
       perror("close");
       return (EXIT_FAILURE);
@@ -97,6 +89,7 @@ int                     listen_to_server(char flg, char *file, int port)
 {
   t_vars                v;
 
+  printf("listen to server"); /* test */
   memset(&v, 0, sizeof(v));
   v.file = file;
   v.s_in_size = sizeof(v.s_in);

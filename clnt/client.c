@@ -5,7 +5,7 @@
 ** Login   <flores_a@epitech.eu>
 ** 
 ** Started on  Sun Mar 22 14:45:32 2015 
-** Last update Sat Mar 28 04:18:48 2015 
+** Last update Sat Mar 28 17:02:26 2015 
 */
 
 #include                "../include/defs.h"
@@ -75,10 +75,13 @@ char            execute_instr(char **tab, FILE *sock_stream)
   if (i != 7)
     {
       if (cmd_ptr[i](tab, sock_stream))
-        return(1);
+        {
+          printf("error execute instr\n");
+          return(1);
+        }
     }
   else
-    printf("\terror: command not found\n");
+    printf("-> error: command not found\n");
   bzero(tab, 1024);
   return (0);
 }
@@ -107,7 +110,10 @@ int             handle_commands(int fd)
     {
       write(1, "\x1B[92mmy_ftp-> \x1B[0m", 18);
       if ((r = get_string(stdin, &buff, 1024, 0)) == -1)
-        return(1);
+        {
+          perror("get_line");
+          return(1);
+        }
       tab = tokenize(buff, mtab);
     }
   free(buff);

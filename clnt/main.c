@@ -5,7 +5,7 @@
 ** Login   <flores_a@epitech.eu>
 ** 
 ** Started on  Sun Mar 22 17:01:56 2015 
-** Last update Fri Mar 27 23:31:00 2015 
+** Last update Sat Mar 28 16:53:40 2015 
 */
 
 #include                "../include/defs.h"
@@ -14,7 +14,8 @@ char                    check_args(int ac, char *av, int *p)
 {
   if (!av || ac != 3 || !(*p = atoi(av)))
     {
-      write(2, "usage: ./client server-ip port\n", 31);
+      if (write(2, "usage: ./client server-ip port\n", 31) == -1)
+        perror("write");
       return (1);
     }
   return (0);
@@ -56,20 +57,23 @@ int                     connect_to_server(struct sockaddr *s_in, int *sockfd,
 
 int                     main(int argc, char **argv)
 {
-  struct sockaddr_in    s_in;
+  struct sockaddr       s_in;
   int                   port;
   int                   cmd_sock_fd;
 
   if ((check_args(argc, argv[2], &port)))
     return (EXIT_FAILURE);
-  if (connect_to_server((struct sockaddr*) &s_in, &cmd_sock_fd,
+  if (connect_to_server(&s_in, &cmd_sock_fd,
                         port, argv[1]))
     return(EXIT_FAILURE);
   printf("\n[\x1B[34mEpitech \x1B[0m"
          "\x1B[93mmy_ftp\x1B[0m 1.0]"
          "\n\nConnected to %s\n", argv[1]);
   if (handle_commands(cmd_sock_fd))
-    return(EXIT_FAILURE);
+    {
+      printf("error handle_commands\n");  /* TEMPORARY */
+      return(EXIT_FAILURE);
+    }
   if (close(cmd_sock_fd) == -1)
     {
       perror("close");

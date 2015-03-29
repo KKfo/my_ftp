@@ -5,7 +5,7 @@
 ** Login   <flores_a@epitech.eu>
 ** 
 ** Started on  Sun Mar 22 16:53:59 2015 
-** Last update Sun Mar 22 16:56:22 2015 
+** Last update Sat Mar 28 13:00:40 2015 
 */
 
 #include                "../include/defs.h"
@@ -20,14 +20,16 @@ char                    check_args(int ac, char *av, int *p)
     return (0);
 }
 
-char                    init_socket( struct protoent **s_p, int *fd)
+char                    init_socket(int *fd)
 {
-  if (!(*s_p = getprotobyname("TCP")))
+  struct protoent       *s_p;
+
+  if (!(s_p = getprotobyname("TCP")))
     {
-      perror("socket");
+      perror("getprotobyname");
       return (1);
     }
-  if ((*fd = socket(AF_INET, SOCK_STREAM, (*s_p)->p_proto)) == -1)
+  if ((*fd = socket(AF_INET, SOCK_STREAM, s_p->p_proto)) == -1)
     {
       perror("socket");
       return (1);
@@ -35,17 +37,15 @@ char                    init_socket( struct protoent **s_p, int *fd)
   return (0);
 }
 
-void                    init_sin(struct sockaddr_in *s_in, int port)
-{
-  s_in->sin_family = AF_INET;
-  s_in->sin_port = htons(port);
-  s_in->sin_addr.s_addr = INADDR_ANY;
-}
-
 char                    do_bind(int sockfd,
-                                const struct sockaddr* s_in,
-                                socklen_t  size)
+                                struct sockaddr* s_in,
+                                socklen_t  size,
+                                int port)
 {
+  memset(s_in, 0, sizeof(*s_in));
+  ((struct sockaddr_in*)s_in)->sin_family = AF_INET;
+  ((struct sockaddr_in*)s_in)->sin_port = htons(port);
+  ((struct sockaddr_in*)s_in)->sin_addr.s_addr = INADDR_ANY;
   if ((bind(sockfd, s_in, size)) == -1)
     {
       if ((close(sockfd)) == -1)
@@ -91,11 +91,11 @@ int                     main(int argc, char **argv)
   if ((check_args(argc, argv[1], &v.port)))
     return (EXIT_FAILURE);
   v.s_in_size = sizeof(v.s_in);
-  init_sin(&v.s_in, v.port);
-  if ((init_socket(&v.s_p, &v.sockfd))
+  if ((init_socket(&v.sockfd))
       || do_bind(v.sockfd,
-                 (const struct sockaddr*)&v.s_in,
-                 v.s_in_size)
+                 (struct sockaddr*)&v.s_in,
+                 v.s_in_size,
+                 v.port)
       || do_listen(v.sockfd))
     return (EXIT_FAILURE);
   process_clients(&v);
