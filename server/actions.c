@@ -5,12 +5,12 @@
 ** Login   <flores_a@epitech.eu>
 ** 
 ** Started on  Sun Mar 29 22:28:58 2015 
-** Last update Sat Mar 28  22:48:22 2015 
+** Last update Thu Apr  2 11:55:22 2015 
 */
 
-#include                "../include/defs.h"
-#include                <sys/types.h>
-#include                <sys/wait.h>
+#include        "../include/defs.h"
+#include        <sys/types.h>
+#include        <sys/wait.h>
 
 int             suser(t_srv *v)
 {
@@ -53,7 +53,6 @@ int             port(t_srv *v)
       return(0);
     }
   msg = "200 PORT command successful. Consider using PASV.\r\n";
-  /* ******************************* */
   sscanf(v->tokens[1], "%d,%d,%d,%d,%d,%d",
          &ip[0],&ip[1],&ip[2],&ip[3],(int*)&port[0],
          (int*)&port[1]);
@@ -67,7 +66,6 @@ int             port(t_srv *v)
     }
   v->s_in.sin_family = AF_INET;
   v->s_in.sin_port = htons(port[0] * 256 + port[1]);
-  /* ****************************************** */
   if (write(v->fd, msg, strlen(msg)) == -1)
     return (1);
   return (0);
@@ -100,13 +98,19 @@ int                     list(t_srv *v)
   char                  *msg;
   char                  *args[] = {"ls", "-l", NULL};
 
+  if (!v->is_auth)
+    {
+      msg = "530 Please login with USER and PASS.\r\n";
+      if (write(v->fd, msg, strlen(msg)) == -1)
+        return (1);
+      return(0);
+    }
   if (connect_to_client((struct sockaddr *)&v->s_in, &sock_fd))
     return (EXIT_FAILURE);
 
   msg = "150 Here comes the directory listing.\r\n";
   if (write(v->fd, msg, strlen(msg)) == -1)
     return (1);
-  /* DO AND SEND LIST COMMAND */
   tmp_fildes = dup(1);
   dup2(sock_fd, 1);
   if (!fork())
@@ -130,15 +134,9 @@ int                     type(t_srv *v)
 {
   char                  *msg;
 
-    msg = "200 Switching to Binary mode.\r\n";
-      if (write(v->fd, msg, strlen(msg)) == -1)
-         return (1);
-  /* if (strcmp(v->tokens[1], "I")) */
-  /*   { */
-  /*     msg = "200 Switching to Binary mode.\r\n"; */
-  /*     if (write(v->fd, msg, strlen(msg)) == -1) */
-  /*        return (1); */
-  /*   } */
+  msg = "200 Switching to Binary mode.\r\n";
+  if (write(v->fd, msg, strlen(msg)) == -1)
+    return (1);
   return (0);
 }
 
@@ -147,12 +145,18 @@ int                     retr(t_srv *v)
   int                   sock_fd;
   char                  *msg;
 
+  if (!v->is_auth)
+    {
+      msg = "530 Please login with USER and PASS.\r\n";
+      if (write(v->fd, msg, strlen(msg)) == -1)
+        return (1);
+      return(0);
+    }
   if (connect_to_client((struct sockaddr *)&v->s_in, &sock_fd))
     return (EXIT_FAILURE);
   msg = "150 Opening BINARY mode data connection.\r\n";
   if (write(v->fd, msg, strlen(msg)) == -1)
     return (1);
-  /* DO AND SEND LIST COMMAND */
   send_to_client(v->tokens[1], sock_fd);
   msg = "226 Transfer complete.\r\n";
   if (write(v->fd, msg, strlen(msg)) == -1)
@@ -170,12 +174,18 @@ int                     stor(t_srv *v)
   int                   sock_fd;
   char                  *msg;
 
+  if (!v->is_auth)
+    {
+      msg = "530 Please login with USER and PASS.\r\n";
+      if (write(v->fd, msg, strlen(msg)) == -1)
+        return (1);
+      return(0);
+    }
   if (connect_to_client((struct sockaddr *)&v->s_in, &sock_fd))
     return (EXIT_FAILURE);
   msg = "150 Opening BINARY mode data connection.\r\n";
   if (write(v->fd, msg, strlen(msg)) == -1)
     return (1);
-  /* DO AND SEND LIST COMMAND */
   get_from_client(v->tokens[1], sock_fd);  
   msg = "226 Transfer complete.\r\n";
   if (write(v->fd, msg, strlen(msg)) == -1)

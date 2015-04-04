@@ -5,16 +5,16 @@
 ** Login   <flores_a@epitech.eu>
 ** 
 ** Started on  Sun Mar 22 14:45:32 2015 
-** Last update Sat Mar 28  01:03:34 2015 
+** Last update Thu Apr  2 14:01:42 2015 
 */
 
-#include                "../include/defs.h"
+#include	"../include/defs.h"
 
 
-int             quit(char **t, FILE *f, char *buff)
+int		quit(char **t, FILE *f, char *buff)
 {
-  size_t        s;
-  char          *get;
+  size_t	s;
+  char		*get;
 
   UNUSED(t);
   UNUSED(buff);
@@ -26,11 +26,11 @@ int             quit(char **t, FILE *f, char *buff)
   return (1);
 }
 
-int                     get_string(FILE *sock_stream, char **buff,
+int		get_string(FILE *sock_stream, char **buff,
                                    size_t l, char s)
 {
-  size_t                n;
-  ssize_t               r;
+  size_t	n;
+  ssize_t	r;
 
   n = 1023;
   r = 0;
@@ -46,9 +46,9 @@ int                     get_string(FILE *sock_stream, char **buff,
   return (r);
 }
 
-char            **tokenize(char *str, char **tab)
+char		**tokenize(char *str, char **tab)
 {
-  int           i;
+  int		i;
 
   i = 1;
   if (str == NULL || *str == '\n')
@@ -74,14 +74,14 @@ char            **tokenize(char *str, char **tab)
   return (tab);
 }
 
-int            execute_instr(char **tab, FILE *sock_stream, char *buff)
+int		execute_instr(char **tab, FILE *sock_stream, char *buff)
 {
-  int           r;
-  int           i;
-  t_aptr        cmd_ptr[7] = {quit, auth, ls
+  int		r;
+  int		i;
+  t_aptr	cmd_ptr[7] = {quit, auth, ls
                               , cd, get, put
                               , pwd};
-  char          *cmds[8] = {"quit", "user",
+  char		*cmds[8] = {"quit", "user",
                             "ls", "cd", "get",
                             "put", "pwd", NULL};
 
@@ -103,7 +103,7 @@ int            execute_instr(char **tab, FILE *sock_stream, char *buff)
   return (EXIT_SUCCESS);
 }
 
-int             handle_commands(int fd)
+int		handle_commands(int fd)
 {
   char          *input;
   ssize_t       r;
