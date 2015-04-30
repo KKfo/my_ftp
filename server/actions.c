@@ -5,7 +5,7 @@
 ** Login   <flores_a@epitech.eu>
 ** 
 ** Started on  Sun Mar 29 22:28:58 2015 
-** Last update Thu Apr  2 11:55:22 2015 
+** Last update Fri Apr 17 17:17:38 2015 
 */
 
 #include        "../include/defs.h"
@@ -56,18 +56,18 @@ int             port(t_srv *v)
   sscanf(v->tokens[1], "%d,%d,%d,%d,%d,%d",
          &ip[0],&ip[1],&ip[2],&ip[3],(int*)&port[0],
          (int*)&port[1]);
-  sprintf(ip_decimal, "%d.%d.%d.%d", ip[0], ip[1], ip[2], ip[3]);
-  if ((v->s_in.sin_addr.s_addr = inet_addr(ip_decimal)) == INADDR_NONE)
-    {
-      msg = "503 invalid ip adress\r\n";
-      if (write(v->fd, msg, strlen(msg)) == -1)
-        return (1);
-      return(EXIT_FAILURE);
-    }
-  v->s_in.sin_family = AF_INET;
-  v->s_in.sin_port = htons(port[0] * 256 + port[1]);
-  if (write(v->fd, msg, strlen(msg)) == -1)
-    return (1);
+  /* sprintf(ip_decimal, "%d.%d.%d.%d", ip[0], ip[1], ip[2], ip[3]); */
+  /* if ((v->s_in.sin_addr.s_addr = inet_addr(ip_decimal)) == INADDR_NONE) */
+  /*   { */
+  /*     msg = "503 invalid ip adress\r\n"; */
+  /*     if (write(v->fd, msg, strlen(msg)) == -1) */
+  /*       return (1); */
+  /*     return(EXIT_FAILURE); */
+  /*   } */
+  /* v->s_in.sin_family = AF_INET; */
+  /* v->s_in.sin_port = htons(port[0] * 256 + port[1]); */
+  /* if (write(v->fd, msg, strlen(msg)) == -1) */
+  /*   return (1); */
   return (0);
 }
 

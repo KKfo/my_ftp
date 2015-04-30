@@ -5,7 +5,7 @@
 ** Login   <flores_a@epitech.eu>
 ** 
 ** Started on  Fri Mar 13 17:02:03 2015 
-** Last update Sat Mar 28 21:32:24 2015 
+** Last update Fri Apr 17 16:16:21 2015 
 */
 
 #include                "../include/defs.h"
@@ -22,14 +22,16 @@ void                    create_token(char *str, char ** const result)
       *result = NULL;
       return ;
     }
+  UNUSED(i);
   result[0] = str;
-  while(str[i] && str[i] != ' ' 
-	&& str[i] != '\r' && str[i] != '\n')
+  while((i < 1024) && str[i] && str[i] != ' '
+        && str[i] != '\r' && str[i] != '\n')
     i++;
   if ((str[i] == ' ' || str[i] == '\r' || str[i] == '\n'))
     {
       str[i] = '\0';
       create_token(&str[i + 1], result + 1);
+      return ;
     }
   else
     *result = NULL;
@@ -40,12 +42,12 @@ int                     check_first_char(t_srv *v, int fd)
 {
   char                  *message;
 
-  if (v->tokens[0] == NULL)
+  if (v->tokens == NULL)
     {
       message = "502 Command not implemented.";
       if (write(fd, message, strlen(message)) == -1)
         return (EXIT_FAILURE);
-      printf("error: %s comand empty\n", v->tokens[0]);
+      printf("error: comand empty\n");
       free(v->tokens);
       return (EXIT_FAILURE);
     }
@@ -90,7 +92,12 @@ int                     handle_client(int fd)
     return (1);
   while((r = read(fd, buff, 4095)))
     {
-      buff[r] = '\0';
+      if (r > 4095)
+        {
+          printf("error\n");
+          exit (1);
+        }
+        buff[r] = '\0';
       do_handle(buff, &v, fd);
     }
   free(v.tokens);
